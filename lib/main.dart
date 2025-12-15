@@ -220,7 +220,9 @@ class _PortfolioHomeState extends State<PortfolioHome> {
 
   Future<void> _loadPortfolioAssets() async {
     try {
-      final manifestContent = await rootBundle.loadString('AssetManifest.json');
+      final manifestContent = await rootBundle.loadString(
+        'assets/AssetManifest.json',
+      );
       final Map<String, dynamic> manifestMap = json.decode(manifestContent);
 
       bool _isImagePath(String path) {
