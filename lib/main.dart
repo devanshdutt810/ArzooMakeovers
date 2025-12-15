@@ -317,7 +317,7 @@ class _PortfolioHomeState extends State<PortfolioHome> {
     final double testimonialTrackHeight = testimonialCardHeight + 40.0;
 
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.transparent,
       body: Stack(
         children: [
           // Main scrollable content with background image and dark overlay
