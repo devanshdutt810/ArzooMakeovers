@@ -36,6 +36,7 @@ class MakeupPortfolioApp extends StatelessWidget {
         primarySwatch: Colors.pink,
         scaffoldBackgroundColor: const Color(0xFF050509),
       ),
+      scrollBehavior: const _SmoothScrollBehavior(),
       home: const PortfolioHome(),
     );
   }
@@ -199,7 +200,6 @@ class _PortfolioHomeState extends State<PortfolioHome> {
   @override
   void initState() {
     super.initState();
-    _scrollController.addListener(() {});
     _loadPortfolioAssets();
   }
 
@@ -1359,11 +1359,14 @@ class _PortfolioHomeState extends State<PortfolioHome> {
     final context = key.currentContext;
     if (context == null) return;
 
-    Scrollable.ensureVisible(
-      context,
-      duration: const Duration(milliseconds: 700),
-      curve: Curves.easeInOut,
-      alignment: 0.1,
+    final box = context.findRenderObject() as RenderBox;
+    final position = box.localToGlobal(Offset.zero);
+    final offset =
+        _scrollController.offset + position.dy - 120; // navbar height offset
+    _scrollController.animateTo(
+      offset,
+      duration: const Duration(milliseconds: 900),
+      curve: Curves.easeOutCubic,
     );
   }
 
@@ -1863,4 +1866,16 @@ class _SocialChip extends StatelessWidget {
       ),
     );
   }
+}
+
+// Improves web scroll physics: trackpad, mouse, touch momentum
+class _SmoothScrollBehavior extends MaterialScrollBehavior {
+  const _SmoothScrollBehavior();
+
+  @override
+  Set<PointerDeviceKind> get dragDevices => {
+    PointerDeviceKind.touch,
+    PointerDeviceKind.mouse,
+    PointerDeviceKind.trackpad,
+  };
 }
