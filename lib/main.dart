@@ -10,9 +10,7 @@
 // No booking functionality — just portfolio, about, services, contact, testimonials.
 
 import 'dart:ui';
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show rootBundle;
 import 'package:google_fonts/google_fonts.dart';
 import 'package:glassmorphism/glassmorphism.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -191,8 +189,79 @@ class _PortfolioHomeState extends State<PortfolioHome> {
   int _currentTestimonial = 0;
   int _currentPortfolio = 0;
 
-  // portfolio items with category to support filtering (loaded from AssetManifest)
-  List<Map<String, String>> _portfolio = [];
+  // portfolio items with category to support filtering (static explicit listing)
+  final List<Map<String, String>> _portfolio = [
+    // ===== BRIDAL =====
+    {'src': 'assets/bridal/1.jpeg', 'category': 'Bridal'},
+    {'src': 'assets/bridal/2.jpeg', 'category': 'Bridal'},
+    {'src': 'assets/bridal/3.jpeg', 'category': 'Bridal'},
+    {'src': 'assets/bridal/4.jpeg', 'category': 'Bridal'},
+    {'src': 'assets/bridal/5.jpeg', 'category': 'Bridal'},
+    {'src': 'assets/bridal/6.jpeg', 'category': 'Bridal'},
+    {'src': 'assets/bridal/7.jpeg', 'category': 'Bridal'},
+    {'src': 'assets/bridal/8.jpeg', 'category': 'Bridal'},
+    {'src': 'assets/bridal/9.jpeg', 'category': 'Bridal'},
+    {'src': 'assets/bridal/10.jpeg', 'category': 'Bridal'},
+    {'src': 'assets/bridal/11.jpeg', 'category': 'Bridal'},
+    {'src': 'assets/bridal/12.jpeg', 'category': 'Bridal'},
+    {'src': 'assets/bridal/13.jpeg', 'category': 'Bridal'},
+    {'src': 'assets/bridal/14.jpeg', 'category': 'Bridal'},
+    {'src': 'assets/bridal/15.jpeg', 'category': 'Bridal'},
+
+    // ===== PARTY =====
+    {'src': 'assets/party/1.jpeg', 'category': 'Party'},
+    {'src': 'assets/party/2.jpeg', 'category': 'Party'},
+    {'src': 'assets/party/3.jpeg', 'category': 'Party'},
+    {'src': 'assets/party/4.jpeg', 'category': 'Party'},
+    {'src': 'assets/party/5.jpeg', 'category': 'Party'},
+    {'src': 'assets/party/6.jpeg', 'category': 'Party'},
+    {'src': 'assets/party/7.jpeg', 'category': 'Party'},
+    {'src': 'assets/party/8.jpeg', 'category': 'Party'},
+    {'src': 'assets/party/9.jpeg', 'category': 'Party'},
+    {'src': 'assets/party/10.jpeg', 'category': 'Party'},
+    {'src': 'assets/party/11.jpeg', 'category': 'Party'},
+    {'src': 'assets/party/12.jpeg', 'category': 'Party'},
+    {'src': 'assets/party/13.jpeg', 'category': 'Party'},
+    {'src': 'assets/party/14.jpeg', 'category': 'Party'},
+    {'src': 'assets/party/15.jpeg', 'category': 'Party'},
+    {'src': 'assets/party/16.jpeg', 'category': 'Party'},
+    {'src': 'assets/party/17.jpeg', 'category': 'Party'},
+    {'src': 'assets/party/18.jpeg', 'category': 'Party'},
+    {'src': 'assets/party/19.jpeg', 'category': 'Party'},
+    {'src': 'assets/party/20.jpeg', 'category': 'Party'},
+    {'src': 'assets/party/21.jpeg', 'category': 'Party'},
+    {'src': 'assets/party/22.jpeg', 'category': 'Party'},
+    {'src': 'assets/party/23.jpeg', 'category': 'Party'},
+    {'src': 'assets/party/24.jpeg', 'category': 'Party'},
+    {'src': 'assets/party/25.jpeg', 'category': 'Party'},
+    {'src': 'assets/party/26.jpeg', 'category': 'Party'},
+    {'src': 'assets/party/27.jpeg', 'category': 'Party'},
+    {'src': 'assets/party/28.jpeg', 'category': 'Party'},
+    {'src': 'assets/party/29.jpeg', 'category': 'Party'},
+    {'src': 'assets/party/30.jpeg', 'category': 'Party'},
+    {'src': 'assets/party/31.jpeg', 'category': 'Party'},
+    {'src': 'assets/party/32.jpeg', 'category': 'Party'},
+    {'src': 'assets/party/33.jpeg', 'category': 'Party'},
+    {'src': 'assets/party/34.jpeg', 'category': 'Party'},
+    {'src': 'assets/party/35.jpeg', 'category': 'Party'},
+    {'src': 'assets/party/36.jpeg', 'category': 'Party'},
+
+    // ===== HAIR =====
+    {'src': 'assets/hair/1.jpeg', 'category': 'Hair'},
+    {'src': 'assets/hair/2.jpeg', 'category': 'Hair'},
+    {'src': 'assets/hair/3.jpeg', 'category': 'Hair'},
+    {'src': 'assets/hair/4.jpeg', 'category': 'Hair'},
+    {'src': 'assets/hair/5.jpeg', 'category': 'Hair'},
+    {'src': 'assets/hair/6.jpeg', 'category': 'Hair'},
+    {'src': 'assets/hair/7.jpeg', 'category': 'Hair'},
+    {'src': 'assets/hair/8.jpeg', 'category': 'Hair'},
+    {'src': 'assets/hair/9.jpeg', 'category': 'Hair'},
+    {'src': 'assets/hair/10.jpeg', 'category': 'Hair'},
+    {'src': 'assets/hair/11.jpeg', 'category': 'Hair'},
+    {'src': 'assets/hair/12.jpeg', 'category': 'Hair'},
+    {'src': 'assets/hair/13.jpeg', 'category': 'Hair'},
+    {'src': 'assets/hair/14.jpeg', 'category': 'Hair'},
+  ];
 
   String _activeCategory = 'All';
   String _activeNav = 'Portfolio';
@@ -200,7 +269,6 @@ class _PortfolioHomeState extends State<PortfolioHome> {
   @override
   void initState() {
     super.initState();
-    _loadPortfolioAssets();
   }
 
   @override
@@ -216,61 +284,6 @@ class _PortfolioHomeState extends State<PortfolioHome> {
     return _portfolio
         .where((p) => (p['category'] ?? '') == _activeCategory)
         .toList();
-  }
-
-  Future<void> _loadPortfolioAssets() async {
-    try {
-      final manifestContent = await rootBundle.loadString(
-        'assets/AssetManifest.json',
-      );
-      final Map<String, dynamic> manifestMap = json.decode(manifestContent);
-
-      bool _isImagePath(String path) {
-        return path.endsWith('.jpg') ||
-            path.endsWith('.jpeg') ||
-            path.endsWith('.png') ||
-            path.endsWith('.webp');
-      }
-
-      // Collect bridal images
-      final bridalPaths =
-          manifestMap.keys
-              .where(
-                (path) =>
-                    path.startsWith('assets/bridal/') && _isImagePath(path),
-              )
-              .toList()
-            ..sort();
-
-      // Collect party images
-      final partyPaths =
-          manifestMap.keys
-              .where(
-                (path) =>
-                    path.startsWith('assets/party/') && _isImagePath(path),
-              )
-              .toList()
-            ..sort();
-
-      // Collect hair images
-      final hairPaths =
-          manifestMap.keys
-              .where(
-                (path) => path.startsWith('assets/hair/') && _isImagePath(path),
-              )
-              .toList()
-            ..sort();
-
-      setState(() {
-        _portfolio = [
-          ...bridalPaths.map((p) => {'src': p, 'category': 'Bridal'}),
-          ...partyPaths.map((p) => {'src': p, 'category': 'Party'}),
-          ...hairPaths.map((p) => {'src': p, 'category': 'Hair'}),
-        ];
-      });
-    } catch (e) {
-      // Optionally handle or log the error
-    }
   }
 
   @override
