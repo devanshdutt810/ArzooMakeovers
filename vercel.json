@@ -1,5 +1,5 @@
 {
-  "buildCommand": "flutter build web",
+  "buildCommand": "export PATH=\"$PATH:$PWD/flutter/bin\" && flutter config --enable-web && flutter build web",
   "outputDirectory": "build/web",
   "routes": [
     { "handle": "filesystem" },
