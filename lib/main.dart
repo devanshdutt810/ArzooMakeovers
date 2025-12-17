@@ -10,6 +10,8 @@
 // No booking functionality — just portfolio, about, services, contact, testimonials.
 
 import 'dart:ui';
+import 'dart:ui_web' as ui;
+import 'dart:html' as html;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:glassmorphism/glassmorphism.dart';
@@ -91,7 +93,7 @@ final Map<String, List<Map<String, dynamic>>> makeupServicesData = {
     {
       'title': 'Basic Makeup',
       'inclusions': '-',
-      'studioPrice': 2499,
+      'studioPrice': 3499,
       'venuePrice': null,
     },
   ],
@@ -165,6 +167,25 @@ class _PortfolioHomeState extends State<PortfolioHome> {
   final PageController _portfolioController = PageController(
     viewportFraction: 0.5,
   );
+  void _registerGoogleMap() {
+    // ignore: undefined_prefixed_name
+    ui.platformViewRegistry.registerViewFactory('aarzoo-google-map', (
+      int viewId,
+    ) {
+      final iframe = html.IFrameElement()
+        ..src =
+            'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3502.4678793049834!2d77.08655177555141!3d28.61573618484314!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d04b2300ad35f%3A0xaa569d1126bbd01b!2sAarzoo%20Makeover!5e0!3m2!1sen!2sin!4v1765885159017!5m2!1sen!2sin'
+        ..style.border = '0'
+        ..style.width = '100%'
+        ..style.height = '100%'
+        ..allowFullscreen = true
+        ..referrerPolicy = 'no-referrer-when-downgrade';
+
+      iframe.setAttribute('loading', 'lazy');
+      return iframe;
+    });
+  }
+
   // Testimonials data: name + quote + avatar for glassmorphic cards
   final List<Map<String, String>> _testimonials = [
     {
@@ -269,6 +290,7 @@ class _PortfolioHomeState extends State<PortfolioHome> {
   @override
   void initState() {
     super.initState();
+    _registerGoogleMap();
   }
 
   @override
@@ -1196,6 +1218,45 @@ class _PortfolioHomeState extends State<PortfolioHome> {
                               );
                             }),
                           ),
+                          const SizedBox(height: 24),
+
+                          Center(
+                            child: GestureDetector(
+                              onTap: () => _launchUri(
+                                'https://maps.app.goo.gl/FinWdr2gZiZuMiLF7',
+                              ),
+                              child: GlassmorphicContainer(
+                                width: 240,
+                                height: 44,
+                                borderRadius: 999,
+                                blur: 16,
+                                alignment: Alignment.center,
+                                border: 1,
+                                linearGradient: LinearGradient(
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                  colors: [
+                                    Colors.white.withOpacity(0.18),
+                                    Colors.white.withOpacity(0.05),
+                                  ],
+                                ),
+                                borderGradient: LinearGradient(
+                                  colors: [
+                                    Colors.white.withOpacity(0.35),
+                                    Colors.white.withOpacity(0.05),
+                                  ],
+                                ),
+                                child: const Text(
+                                  'View all reviews on Google',
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
                           const SizedBox(height: 36),
 
                           // Connect section with circular glassmorphic buttons
@@ -1248,6 +1309,45 @@ class _PortfolioHomeState extends State<PortfolioHome> {
                           ),
 
                           const SizedBox(height: 40),
+
+                          //const SizedBox(height: 32),
+                          GestureDetector(
+                            onTap: () => _launchUri(
+                              'https://maps.app.goo.gl/FinWdr2gZiZuMiLF7',
+                            ),
+                            child: Center(
+                              child: GlassmorphicContainer(
+                                width: isMobile ? width - 32 : 900,
+                                height: isMobile ? 260 : 380,
+                                borderRadius: 24,
+                                blur: 18,
+                                alignment: Alignment.center,
+                                border: 1,
+                                linearGradient: LinearGradient(
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                  colors: [
+                                    Colors.white.withOpacity(0.12),
+                                    Colors.white.withOpacity(0.03),
+                                  ],
+                                ),
+                                borderGradient: LinearGradient(
+                                  colors: [
+                                    Colors.white.withOpacity(0.35),
+                                    Colors.white.withOpacity(0.05),
+                                  ],
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: const HtmlElementView(
+                                    viewType: 'aarzoo-google-map',
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+
+                          const SizedBox(height: 48),
 
                           // Footer
                           Center(
